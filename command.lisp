@@ -300,6 +300,7 @@ connect to.  `connection-security' determines which port number is found.
                           :nickname nickname
                           :username username
                           :realname realname)))
+    #+sbcl (setf (sb-bsd-sockets::sockopt-keep-alive (usocket:socket socket)) t)
     (setf (user connection) user)
     (unless (null password)
       (pass connection password))
