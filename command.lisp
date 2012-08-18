@@ -57,6 +57,7 @@
 (defgeneric wallops (connection message))
 (defgeneric userhost (connection nickname))
 (defgeneric ison (connection user))
+(defgeneric action (connection target message))
 (defgeneric ctcp (connection target message))
 (defgeneric ctcp-reply (connection target message))
 (defgeneric ctcp-chat-initiate (connection nickname &key passive)
@@ -389,6 +390,16 @@ connect to.  `connection-security' determines which port number is found.
 
 (defmethod ctcp-reply ((connection connection) target message)
   (send-irc-message connection :notice target (make-ctcp-message message)))
+
+(defmethod action ((connection connection) (target string) (message string))
+  (ctcp connection target (concatenate 'string "ACTION " message)))
+
+(defmethod action ((connection connection) (user user) (message string))
+  (action connection (nickname user) message))
+
+(defmethod action ((connection connection) (channel channel) (message string))
+  (action connection (name channel) message))
+
 
 ;; Intermezzo: Manage outstanding offers
 
