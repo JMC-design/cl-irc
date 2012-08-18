@@ -339,7 +339,7 @@ is up for removal in a next release.")
                         (declare (ignore c))
                         (invoke-restart 'continue))))
                 (read-message-loop connection)))))
-    (let ((name (format nil "irc-hander-~D" (incf *process-count*))))
+    (let ((name (format nil "irc-handler-~D" (incf *process-count*))))
       (start-process #'do-loop name))))
 
 (defun stop-background-message-handler (process)
