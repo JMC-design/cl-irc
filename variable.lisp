@@ -188,6 +188,7 @@
     (304 :rpl_away)
     (305 :rpl_unaway)
     (306 :rpl_noaway)
+    (307 :rpl_whoisidentified)
     (311 :rpl_whoisuser)
     (312 :rpl_whoisserver)
     (313 :rpl_whoisoperator)
@@ -205,7 +206,9 @@
     (325 :rpl_uniqopis)
     (326 :rpl_whoisoperprivs) ; Seen in dancer ircd source
     (327 :rpl_whoisrealhost) ; Seen in dancer ircd source
+    (328 :rpl_channel_url)
     (329 :rpl_creationtime) ; Seen in dancer ircd source
+    (330 :rpl_whoisidentified)
     (331 :rpl_notopic)
     (332 :rpl_topic)
     (333 :rpl_topicwhotime) ; Seen in dancer ircd source
@@ -245,6 +248,7 @@
     (393 :rpl_users)
     (394 :rpl_endofusers)
     (395 :rpl_nousers)
+    (396 :rpl_hiddenhost)
     (399 :rpl_message) ; Seen in dancer ircd source
     (401 :err_nosuchnick)
     (402 :err_nosuchserver)
@@ -315,5 +319,8 @@
     (513 :err_maxforwarding) ; Seen in dancer ircd source
     (514 :err_noforwarding) ; Seen in dancer ircd source
     (515 :err_nounidentified) ; Seen in dancer ircd source
-    (516 :err_last_err_msg))) ; Seen in dancer ircd source
+    (516 :err_last_err_msg) ; Seen in dancer ircd source
+    (671 :rpl_secureconnection)
+    (710 :rpl_noidea) ;; ## what's the real event? 
+    ))
 
