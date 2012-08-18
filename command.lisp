@@ -344,8 +344,10 @@ connect to.  `connection-security' determines which port number is found.
 (defmethod ping ((connection connection) (server string))
   (send-irc-message connection :ping server))
 
-(defmethod pong ((connection connection) (server string) &optional (server2 ""))
-  (send-irc-message connection :pong server server2))
+(defmethod pong ((connection connection) (server string) &optional server2)
+  (if server2
+      (send-irc-message connection :pong server server2)
+      (send-irc-message connection :pong server)))
 
 (defmethod error- ((connection connection) (message string))
   (send-irc-message connection :error message))
