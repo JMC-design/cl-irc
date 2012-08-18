@@ -292,7 +292,7 @@ START-BACKGROUND-MESSAGE-HANDLER and therefore DEPRECATED itself."
   #+allegro (mp:process-run-function name function)
   #+cmu (mp:make-process function :name name)
   #+lispworks (mp:process-run-function name nil function)
-  #+sb-thread (sb-thread:make-thread function)
+  #+sb-thread (sb-thread:make-thread function :name name)
   #+openmcl (ccl:process-run-function name function)
   #+armedbear (ext:make-thread function))
 
