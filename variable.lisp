@@ -15,8 +15,8 @@
   (format nil "CL IRC library, cl-irc:~A:~A ~A"
           *version* (machine-type) (machine-version)))
 
-(defparameter *download-host* "ftp://common-lisp.net/")
-(defparameter *download-directory* "/pub/project/cl-irc/")
+(defparameter *download-host* "http://common-lisp.net/")
+(defparameter *download-directory* "/project/cl-irc/")
 (defparameter *download-file*
   (format nil "cl-irc-~A.tar.gz" *version*))
 
@@ -27,6 +27,15 @@
                                     ))
 (defvar *default-quit-message*
   "Common Lisp IRC library - http://common-lisp.net/project/cl-irc")
+
+(defparameter *unknown-reply-hook* nil
+  "A function of two arguments, called with the related irc connection
+object and the protocol message string upon detection of an unmappable
+response code.
+
+The function should return a valid IRC-MESSAGE class or NIL.
+
+The parameter can be NIL to disable the hook.")
 
 (defparameter *default-isupport-CHANMODES*
   "beI,kO,l,aimnpqsrt")

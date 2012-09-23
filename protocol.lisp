@@ -280,8 +280,8 @@ input."
       (when *debug-p*
         (format *debug-stream* "~A" (describe message)))
       (when message
-        (irc-message-event connection message))
-      message))) ; needed because of the "loop while" in read-message-loop
+        (irc-message-event connection message)))
+    t)) ;; connected -> continue processing
 
 (defvar *process-count* 0)
 
@@ -311,34 +311,21 @@ is up for removal in a next release.")
   (flet ((select-handler (fd)
             (declare (ignore fd))
             (if (listen (network-stream connection))
-                (handler-bind
-                    ;; install sensible recovery: nobody can wrap the
-                    ;; handler...
-                    ((no-such-reply
-                      #'(lambda (c)
-                          (declare (ignore c))
-                          (invoke-restart 'continue))))
-                  (read-message connection))
-              ;; select() returns with no
-              ;; available data if the stream
-              ;; has been closed on the other
-              ;; end (EPIPE)
-              (sb-sys:invalidate-descriptor
-               (sb-sys:fd-stream-fd
-                (network-stream connection))))))
+                (read-message connection)
+                ;; select() returns with no
+                ;; available data if the stream
+                ;; has been closed on the other
+                ;; end (EPIPE)
+                (sb-sys:invalidate-descriptor
+                 (sb-sys:fd-stream-fd
+                  (network-stream connection))))))
     (sb-sys:add-fd-handler (sb-sys:fd-stream-fd
                             (network-stream connection))
                            :input #'select-handler))
 
   #-(and sbcl (not sb-thread))
   (flet ((do-loop ()
-           (loop
-              (handler-bind
-                  ((no-such-reply
-                    #'(lambda (c)
-                        (declare (ignore c))
-                        (invoke-restart 'continue))))
-                (read-message-loop connection)))))
+           (read-message-loop connection)))
     (let ((name (format nil "irc-handler-~D" (incf *process-count*))))
       (start-process #'do-loop name))))
 
@@ -357,19 +344,23 @@ this function is DEPRECATED."
 
 (defgeneric read-message-loop (connection))
 (defmethod read-message-loop (connection)
-  (loop while (read-message connection)))
+  (handler-bind
+      (loop while (read-message connection))
+    (end-of-file () nil)))
 
 
 (defmethod read-irc-message ((connection connection))
-  "Read and parse an IRC-message from the `connection'."
-  (handler-case
-   (let* ((msg-string (read-protocol-line connection))
-          (message (when msg-string (create-irc-message msg-string))))
-     (when message (setf (connection message) connection))
-     message)
-  (end-of-file
-   ;; satisfy read-message-loop assumption of nil when no more messages
-   ())))
+  "Read and parse an IRC message from the `connection'."
+  (let* ((msg-string (read-protocol-line connection))
+         (message (when msg-string
+                    (handler-case
+                        (create-irc-message msg-string)
+                      (no-such-reply ()
+                        (when *unknown-reply-hook*
+                          (funcall *unknown-reply-hook*
+                                   connection msg-string)))))))
+    (when message (setf (connection message) connection))
+    message))
 
 
 (defmethod send-irc-message ((connection connection) command

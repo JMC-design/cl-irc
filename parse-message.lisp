@@ -12,12 +12,8 @@ symbol representing the reply or raise a continuable error
 (`no-such-reply') which gives you the opportunity to ignore the
 situation."
   (let ((name (assoc reply-number reply-names)))
-    (if name
-        (cadr name)
-        (progn
-          (cerror "Ignore unknown reply."
-                  'no-such-reply :reply-number reply-number)
-          :unknown-reply))))
+    (when name
+      (cadr name))))
 
 (defun return-source (string &key (start 0))
   "Assuming `string' is a valid IRC message this function returns the
@@ -198,14 +194,17 @@ in the message."
            ;;  (setf command (find-reply-name (parse-integer command)))
            ;;  (setf class 'irc-error-reply)))
           ((numeric-reply-p command)
-           (progn
-             (setf command (find-reply-name (parse-integer command)))
+           (let* ((reply-number (parse-integer command))
+                  (reply-name (find-reply-name reply-number)))
+             (unless reply-name
+               (error "Ignore unknown reply."
+                      'no-such-reply :reply-number reply-number))
+             (setf command reply-name)
              (setf class (find-irc-message-class command))))
           (t
-           (progn
-             (setf command (intern (string-upcase command)
-                                   (find-package :keyword)))
-             (setf class (find-irc-message-class command))))))
+           (setf command (intern (string-upcase command)
+                                 (find-package :keyword)))
+           (setf class (find-irc-message-class command)))))
       (when ctcp
         (setf class (find-ctcp-message-class ctcp)))
       (let ((instance (make-instance class
