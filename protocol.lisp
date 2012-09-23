@@ -294,7 +294,7 @@ START-BACKGROUND-MESSAGE-HANDLER and therefore DEPRECATED itself."
   #+lispworks (mp:process-run-function name nil function)
   #+sb-thread (sb-thread:make-thread function :name name)
   #+openmcl (ccl:process-run-function name function)
-  #+armedbear (ext:make-thread function))
+  #+armedbear (threads:make-thread function))
 
 (defun start-background-message-handler (connection)
   "Read messages from the `connection', parse them and dispatch
@@ -340,7 +340,7 @@ this function is DEPRECATED."
     #+sb-thread (sb-thread:destroy-thread process)
     #+lispworks (mp:process-kill process)
     #+openmcl (ccl:process-kill process)
-    #+armedbear (ext:destroy-thread process))
+    #+armedbear (threads:destroy-thread process))
 
 (defgeneric read-message-loop (connection))
 (defmethod read-message-loop (connection)
