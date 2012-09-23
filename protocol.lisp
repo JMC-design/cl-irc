@@ -344,7 +344,7 @@ this function is DEPRECATED."
 
 (defgeneric read-message-loop (connection))
 (defmethod read-message-loop (connection)
-  (handler-bind
+  (handler-case
       (loop while (read-message connection))
     (end-of-file () nil)))
 
