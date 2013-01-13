@@ -289,7 +289,7 @@ objects in sync."))
             (op mode-name value)
             change
           (unless (has-mode-p channel mode-name)
-            (add-mode target mode-name
+            (add-mode channel mode-name
                       (make-mode connection channel mode-name)))
           (funcall (if (char= #\+ op) #'set-mode #'unset-mode)
                    channel mode-name value)))))))
