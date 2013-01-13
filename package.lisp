@@ -18,7 +18,6 @@
              :stop-background-message-handler
              :destructuring-arguments
              :&req
-             :socket-connect
              :server-name
              :server-port
              :no-such-reply
