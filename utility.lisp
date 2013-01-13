@@ -493,6 +493,21 @@ It returns a list of mode-description records."
               (split-sequence:split-sequence #\: x))
           (split-sequence:split-sequence #\, argument)))
 
+(defun apply-mode-changes (connection target mode-arguments server-p)
+  (dolist (change (parse-mode-arguments connection target mode-arguments
+                                        :server-p server-p))
+    (apply-mode-change connection target change)))
+
+(defun apply-mode-change (connection target change)
+  (destructuring-bind
+        (op mode-name value)
+      change
+    (unless (has-mode-p target mode-name)
+      (add-mode target mode-name
+                (make-mode connection target mode-name)))
+    (funcall (if (char= #\+ op) #'set-mode #'unset-mode)
+             target mode-name value)))
+
 (defun parse-mode-arguments (connection target arguments &key server-p)
   "Create a list of mode changes with their arguments for `target'
    from `mode-string' and `arguments'.

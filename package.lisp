@@ -32,6 +32,7 @@
              :get-mode
              :set-mode
              :unset-mode
+             :apply-mode-changes
              :parse-mode-arguments
              :parse-raw-message
              :normalize-nickname

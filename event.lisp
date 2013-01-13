@@ -279,20 +279,10 @@ objects in sync."))
     (destructuring-bind
         (target channel &rest mode-arguments)
         arguments
-    (let* ((channel (find-channel connection channel))
-           (mode-changes
-            (when channel
-              (parse-mode-arguments connection channel mode-arguments
-                                    :server-p (user connection)))))
-      (dolist (change mode-changes)
-        (destructuring-bind
-            (op mode-name value)
-            change
-          (unless (has-mode-p channel mode-name)
-            (add-mode channel mode-name
-                      (make-mode connection channel mode-name)))
-          (funcall (if (char= #\+ op) #'set-mode #'unset-mode)
-                   channel mode-name value)))))))
+      (let ((channel (find-channel connection channel)))
+        (when channel
+          (apply-mode-changes connection channel
+                              mode-arguments (user connection)))))))
 
 (defmethod default-hook ((message irc-mode-message))
   (destructuring-bind
@@ -300,20 +290,9 @@ objects in sync."))
       (arguments message)
     (let* ((connection (connection message))
            (target (or (find-channel connection target)
-                       (find-user connection target)))
-           (mode-changes
-            (when target
-              (parse-mode-arguments connection target arguments
-                                     :server-p (user connection)))))
-      (dolist (change mode-changes)
-        (destructuring-bind
-            (op mode-name value)
-            change
-          (unless (has-mode-p target mode-name)
-            (add-mode target mode-name
-                      (make-mode connection target mode-name)))
-          (funcall (if (char= #\+ op) #'set-mode #'unset-mode)
-                   target mode-name value))))))
+                       (find-user connection target))))
+      (when target
+        (apply-mode-changes connection target arguments (user connection))))))
 
 (defmethod default-hook ((message irc-nick-message))
   (with-slots
