@@ -247,6 +247,7 @@ connection.")
                      irc-rpl_topic-message
                      irc-rpl_namreply-message
                      irc-rpl_endofnames-message
+                     irc-rpl_welcome-message
                      irc-ping-message
                      irc-join-message
                      irc-topic-message

@@ -141,6 +141,19 @@ objects in sync."))
               (username user) username
               (hostname user) hostname)))))
 
+(defmethod default-hook ((message irc-rpl_welcome-message))
+  (with-slots
+        (connection host user arguments)
+      message
+    (destructuring-bind
+          (nickname welcome-message)
+        arguments
+      (setf (user connection)
+            (make-user connection
+                       :nickname nickname
+                       :hostname host
+                       :username user)))))
+
 (defmethod default-hook ((message irc-rpl_list-message))
   (destructuring-bind
       (channel count topic)

@@ -296,13 +296,8 @@ connect to.  `connection-security' determines which port number is found.
                                       :socket socket
                                       :network-stream stream
                                       :client-stream logging-stream
-                                      :server-name server))
-         (user (make-user connection
-                          :nickname nickname
-                          :username username
-                          :realname realname)))
+                                      :server-name server)))
     #+sbcl (setf (sb-bsd-sockets::sockopt-keep-alive (usocket:socket socket)) t)
-    (setf (user connection) user)
     (unless (null password)
       (pass connection password))
     (nick connection nickname)
