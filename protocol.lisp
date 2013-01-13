@@ -122,10 +122,6 @@ user class.")))
     :initarg :server-port
     :accessor server-port
     :initform *default-irc-server-port*)
-   (socket
-    :initarg :socket
-    :reader socket
-    :documentation "Slot to store socket (for internal use only).")
    (network-stream
     :initarg :network-stream
     :accessor network-stream
@@ -212,7 +208,6 @@ connection.")
                              (password nil)
                              (server-name "")
                              (server-port nil)
-                             (socket nil)
                              (network-stream nil)
                              (outgoing-external-format *default-outgoing-external-format*)
                              (client-stream t)
@@ -226,7 +221,6 @@ connection.")
                                    :password password
                                    :server-name server-name
                                    :server-port server-port
-                                   :socket socket
                                    :network-stream network-stream
                                    :output-stream output-stream
                                    :client-stream client-stream)))
@@ -461,11 +455,6 @@ a lost connection is detected.")
     :accessor remote-user
     :documentation "The user at the other end of this connection.  The
 user at this end can be reached via your normal connection object.")
-   (socket
-    :initarg :socket
-    :accessor socket
-    :initform nil
-    :documentation "Socket used to do the remote client.")
    (network-stream
     :initarg :network-stream
     :accessor network-stream)
@@ -554,7 +543,6 @@ of the network pipe.")
                                       (client-stream nil)
                                       (irc-connection nil)
                                       (close-on-main t)
-                                      (socket nil)
                                       (network-stream nil)
                                       (outgoing-external-format *default-outgoing-external-format*)
                                       (hooks nil))
@@ -569,7 +557,6 @@ of the network pipe.")
                                     :output-stream output-stream
                                     :irc-connection irc-connection
                                     :close-on-main close-on-main
-                                    :socket socket
                                     :network-stream network-stream)))
     (dolist (hook hooks)
       (add-hook connection (car hook) (cdar hook)))

@@ -293,7 +293,6 @@ connect to.  `connection-security' determines which port number is found.
                                        (usocket:socket-stream socket))
                    (usocket:socket-stream socket)))
          (connection (make-connection :connection-type connection-type
-                                      :socket socket
                                       :network-stream stream
                                       :client-stream logging-stream
                                       :server-name server)))
@@ -552,7 +551,6 @@ for `connection'."))
             (make-dcc-chat-connection
              :irc-connection irc-connection
              :remote-user (find-user irc-connection (source message))
-             :socket socket
              :network-stream (usocket:socket-stream socket))))))))
 
 (defmethod dcc-request-accept ((message dcc-ctcp-dcc-chat-request-message))
