@@ -199,6 +199,7 @@ connection.")
 (defgeneric send-irc-message (connection command &rest arguments))
 (defgeneric get-hooks (connection class))
 (defgeneric add-hook (connection class hook))
+(defgeneric append-hook (connection class hook))
 (defgeneric remove-hook (connection class hook))
 (defgeneric remove-hooks (connection class))
 (defgeneric remove-all-hooks (connection))
@@ -382,6 +383,11 @@ server, via the `connection'."
   "Add `hook' to `class'."
   (setf (gethash class (hooks connection))
         (pushnew hook (gethash class (hooks connection)))))
+
+(defmethod append-hook (connection class hook)
+  "Append `hook' to `class'."
+  (setf (gethash class (hooks connection))
+        (append (gethash class (hooks connection)) (list hook))))
 
 (defmethod remove-hook ((connection connection) class hook)
   "Remove `hook' from `class'."

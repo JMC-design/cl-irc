@@ -48,6 +48,7 @@
              :client-stream
              :channels
              :add-hook
+             :append-hook
              :remove-hook
              :remove-hooks
              :remove-all-hooks
