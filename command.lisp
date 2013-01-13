@@ -9,7 +9,7 @@
 (defgeneric nick (connection new-nickname))
 (defgeneric user- (connection username mode &optional realname))
 (defgeneric oper (connection name password))
-(defgeneric mode (connection nickname mode))
+(defgeneric mode (connection nickname &optional mode))
 (defgeneric op (connection channel nickname))
 (defgeneric deop (connection channel nickname))
 (defgeneric voice (connection channel user))
@@ -103,7 +103,7 @@ registered."
 (defmethod oper ((connection connection) (name string) (password string))
   (send-irc-message connection :oper name password))
 
-(defmethod mode ((connection connection) (nickname string) (mode string))
+(defmethod mode ((connection connection) (nickname string) &optional mode)
   (send-irc-message connection :mode nickname mode))
 
 ;; utility functions not part of the RFCs
