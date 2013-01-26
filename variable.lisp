@@ -330,6 +330,6 @@ The parameter can be NIL to disable the hook.")
     (515 :err_nounidentified) ; Seen in dancer ircd source
     (516 :err_last_err_msg) ; Seen in dancer ircd source
     (671 :rpl_secureconnection)
-    (710 :rpl_noidea) ;; ## what's the real event? 
+    (710 :rpl_knock)
     ))
 
