@@ -226,7 +226,7 @@ in the message."
   (let* ((class 'dcc-privmsg-message)
          (ctcp (ctcp-message-type string)))
     (when ctcp
-      (setf class (find-dcc-ctcp-message class ctcp)))
+      (setf class (find-dcc-ctcp-message-class ctcp)))
     (let ((instance (make-instance class
                                    :arguments (list string)
                                    :connection nil
