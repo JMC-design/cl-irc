@@ -13,6 +13,7 @@
     (:export :read-message-loop
              :read-message
              :read-irc-message
+             :connectedp
              :irc-message-event
              :start-background-message-handler
              :stop-background-message-handler
