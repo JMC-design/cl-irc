@@ -333,7 +333,7 @@ this function is DEPRECATED."
   (declare (ignorable process))
     #+cmu (mp:destroy-process process)
     #+allegro (mp:process-kill process)
-    #+sb-thread (sb-thread:destroy-thread process)
+    #+sb-thread (sb-thread:terminate-thread process)
     #+lispworks (mp:process-kill process)
     #+openmcl (ccl:process-kill process)
     #+armedbear (threads:destroy-thread process))
